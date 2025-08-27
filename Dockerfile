@@ -1,11 +1,20 @@
-# Use the official NGINX image as base
-FROM nginx:latest
+# Use official Node.js LTS image
+FROM node:20
 
-# Copy index.html into the default NGINX html directory
-COPY index.html /usr/share/nginx/html/index.html
+# Set working directory
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Copy package.json and package-lock.json
+COPY package.json package-lock.json* ./
 
-# Start NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Install dependencies
+RUN npm install
+
+# Copy all project files
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start the app
+CMD ["npm", "start"]
